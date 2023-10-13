@@ -123,7 +123,7 @@ else:
 
 if not config.has_section("translation_source"):
     config.add_section("translation_source")
-    config.set("translation_source", "source", "Traduction FR Cirque Lisoir & Co")
+    config.set("translation_source", "source", "Traduction Cirque Lisoir & Communauté FR")
 
 with open(CONFIG_FILE, "w") as configfile:
     config.write(configfile)
