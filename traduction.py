@@ -103,7 +103,7 @@ button_path = ttk.Button(fenetre, text="Sélectionner le dossier", command=get_p
 button_traduction = ttk.Button(fenetre, text="Appliquer la traduction", command=get_translation, state="disabled")
 
 # Définition de la taille de la fenêtre
-fenetre.geometry("500x200")
+fenetre.geometry("650x200")
 
 # Placement des widgets
 titre.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
