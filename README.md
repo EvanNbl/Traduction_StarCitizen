@@ -24,7 +24,7 @@ En cas de problème, vous pouvez me contacter sur Discord : `@evan_nbl`
 ## Crédits
 - [Evan Nbl]
 
-# Contribution 
+### Contribution 
 - [Thomas Bastin]
 
 ## Licence
