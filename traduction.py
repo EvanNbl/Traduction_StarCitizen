@@ -9,23 +9,33 @@ import zipfile
 
 # Définition des constantes
 DEFAULT_PATH = "C:\\Program Files\\Roberts Space Industries\\StarCitizen\\LIVE\\data"
+CONFIG_FILE = "config.ini"
 
-# Définition des fonctions
+# Fonction pour mettre à jour la source de traduction
+def update_translation_source(event):
+    source = translation_source_var.get()
+    config.set("translation_source", "source", source)
+    with open(CONFIG_FILE, "w") as configfile:
+        config.write(configfile)
+
+# Fonction pour sélectionner le dossier de Star Citizen
 def get_path():
     path = filedialog.askdirectory(title="Sélectionner le dossier de Star Citizen")
     if path:
         config.set("path", "path", path)
-        with open("config.ini", "w") as configfile:
+        with open(CONFIG_FILE, "w") as configfile:
             config.write(configfile)
         label_path.configure(text=path)
         button_traduction.configure(state="normal")
     else:
         messagebox.showerror("Erreur", "Vous devez sélectionner un dossier")
 
+# Fonction pour appliquer la traduction
 def get_translation():
     source = config.get("translation_source", "source")
     path = config.get("path", "path")
     path = path[:-5]
+
     try:
         with open(os.path.join(path, "user.cfg"), "w") as userfile:
             userfile.write("g_language = french_(france)")
@@ -40,14 +50,12 @@ def get_translation():
         except Exception as e:
             messagebox.showerror("Erreur", f"Impossible de récupérer le fichier de traduction : {str(e)}")
     elif source == "Traduction FR de SPEED0U":
-        # Télécharger le zip depuis GitHub
         zip_url = "https://github.com/SPEED0U/StarCitizenTranslations/archive/master.zip"
         try:
             urllib.request.urlretrieve(zip_url, "translations.zip")
         except Exception as e:
             messagebox.showerror("Erreur", f"Impossible de télécharger le fichier de traduction : {str(e)}")
 
-        # Extraire le zip
         with zipfile.ZipFile("translations.zip", "r") as zip_ref:
             zip_ref.extract("StarCitizenTranslations-main/french_(france)/global.ini")
             shutil.copy("StarCitizenTranslations-main/french_(france)/global.ini", "global.ini")
@@ -107,19 +115,17 @@ style.configure("TCombobox", font=font_style)
 
 # Définition du fichier de configuration
 config = configparser.ConfigParser()
-if os.path.isfile("config.ini"):
-    config.read("config.ini")
+if os.path.isfile(CONFIG_FILE):
+    config.read(CONFIG_FILE)
 else:
     config.add_section("path")
     config.set("path", "path", DEFAULT_PATH)
 
-# Ajoutez la section "translation_source" avec la source par défaut si elle n'existe pas
 if not config.has_section("translation_source"):
     config.add_section("translation_source")
     config.set("translation_source", "source", "Traduction FR Hugo Lisoir")
 
-# Enregistrez le fichier de configuration
-with open("config.ini", "w") as configfile:
+with open(CONFIG_FILE, "w") as configfile:
     config.write(configfile)
 
 # Logo
@@ -146,13 +152,6 @@ sous_titre.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 label_path.grid(row=3, column=0, padx=10, pady=10)
 button_path.grid(row=3, column=1, padx=10, pady=10)
 button_traduction.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
-
-# Définition de la fonction pour mettre à jour la source de traduction
-def update_translation_source(event):
-    source = translation_source_var.get()
-    config.set("translation_source", "source", source)
-    with open("config.ini", "w") as configfile:
-        config.write(configfile)
 
 # Associez la fonction à l'événement de changement d'option dans le sélecteur
 translation_source_combobox.bind("<<ComboboxSelected>>", update_translation_source)
