@@ -43,7 +43,7 @@ def get_translation():
         messagebox.showerror("Erreur", f"Impossible de créer le fichier user.cfg : {str(e)}")
 
     path = os.path.join(path, "data")
-    if source == "Traduction FR Cirque Lisoir & Co":
+    if source == "Traduction Cirque Lisoir & Communauté FR":
         url = "https://traduction.circuspes.fr/fr/global.ini"
         try:
             urllib.request.urlretrieve(url, "global.ini")
