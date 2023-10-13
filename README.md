@@ -23,7 +23,7 @@ En cas de problème, vous pouvez me contacter sur Discord : `@evan_nbl`
 
 ## Crédits
 - [Evan Nbl]
-- [Thomas Bastin](Fix)
+- [Thomas Bastin]
 
 ## Licence
 Cette utilitaire n'est pas approuvé par Cloud Imperium ou Roberts Space Industries. Star Citizen®, Squadron 42®, Roberts Space Industries® et Cloud Imperium® sont des marques déposées de Cloud Imperium Rights LLC. Tous droits réservés.
