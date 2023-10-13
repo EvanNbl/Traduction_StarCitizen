@@ -43,7 +43,7 @@ def get_translation():
         messagebox.showerror("Erreur", f"Impossible de créer le fichier user.cfg : {str(e)}")
 
     path = os.path.join(path, "data")
-    if source == "Traduction FR Cirque Lisoir & Co":
+    if source == "Traduction Cirque Lisoir & Communauté FR":
         url = "https://traduction.circuspes.fr/fr/global.ini"
         try:
             urllib.request.urlretrieve(url, "global.ini")
@@ -123,7 +123,7 @@ else:
 
 if not config.has_section("translation_source"):
     config.add_section("translation_source")
-    config.set("translation_source", "source", "Traduction FR Cirque Lisoir & Co")
+    config.set("translation_source", "source", "Traduction Cirque Lisoir & Communauté FR")
 
 with open(CONFIG_FILE, "w") as configfile:
     config.write(configfile)
@@ -141,7 +141,7 @@ button_traduction = ttk.Button(fenetre, text="Appliquer la traduction", command=
 # Créez le sélecteur
 translation_source_label = ttk.Label(fenetre, text="Source de traduction :")
 translation_source_var = tk.StringVar()
-translation_source_combobox = ttk.Combobox(fenetre, textvariable=translation_source_var, values=["Traduction FR Cirque Lisoir & Co", "Traduction FR de SPEED0U"])
+translation_source_combobox = ttk.Combobox(fenetre, textvariable=translation_source_var, values=["Traduction Cirque Lisoir & Communauté FR", "Traduction FR de SPEED0U"])
 translation_source_combobox.set(config.get("translation_source", "source"))
 translation_source_combobox["width"] = 30
 
