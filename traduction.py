@@ -43,7 +43,7 @@ def get_translation():
         messagebox.showerror("Erreur", f"Impossible de créer le fichier user.cfg : {str(e)}")
 
     path = os.path.join(path, "data")
-    if source == "Traduction FR Hugo Lisoir":
+    if source == "Traduction FR Cirque Lisoir & Co":
         url = "https://traduction.circuspes.fr/fr/global.ini"
         try:
             urllib.request.urlretrieve(url, "global.ini")
@@ -123,7 +123,7 @@ else:
 
 if not config.has_section("translation_source"):
     config.add_section("translation_source")
-    config.set("translation_source", "source", "Traduction FR Hugo Lisoir")
+    config.set("translation_source", "source", "Traduction FR Cirque Lisoir & Co")
 
 with open(CONFIG_FILE, "w") as configfile:
     config.write(configfile)
@@ -141,13 +141,13 @@ button_traduction = ttk.Button(fenetre, text="Appliquer la traduction", command=
 # Créez le sélecteur
 translation_source_label = ttk.Label(fenetre, text="Source de traduction :")
 translation_source_var = tk.StringVar()
-translation_source_combobox = ttk.Combobox(fenetre, textvariable=translation_source_var, values=["Traduction FR Hugo Lisoir", "Traduction FR de SPEED0U"])
+translation_source_combobox = ttk.Combobox(fenetre, textvariable=translation_source_var, values=["Traduction FR Cirque Lisoir & Co", "Traduction FR de SPEED0U"])
 translation_source_combobox.set(config.get("translation_source", "source"))
-translation_source_combobox["width"] = 25
+translation_source_combobox["width"] = 30
 
 # Placement des widgets
 titre.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
-translation_source_combobox.grid(row=0, column=2, padx=10, pady=10)
+translation_source_combobox.grid(row=0, column=1, padx=10, pady=10)
 sous_titre.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 label_path.grid(row=3, column=0, padx=10, pady=10)
 button_path.grid(row=3, column=1, padx=10, pady=10)
@@ -157,7 +157,7 @@ button_traduction.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
 translation_source_combobox.bind("<<ComboboxSelected>>", update_translation_source)
 
 # Lancement de la fenêtre
-fenetre.geometry("850x250")  # Augmentez la hauteur pour faire de la place pour le sélecteur
+fenetre.geometry("700x200")  # Augmentez la hauteur pour faire de la place pour le sélecteur
 fenetre.mainloop()
 
 # Fin du script
