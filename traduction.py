@@ -11,6 +11,17 @@ import zipfile
 DEFAULT_PATH = "C:\\Program Files\\Roberts Space Industries\\StarCitizen\\LIVE\\data"
 CONFIG_FILE = "config.ini"
 
+# Textes réutilisés
+SELECT_FOLDER_TEXT = "Sélectionner le dossier de Star Citizen"
+ERROR_TITLE_TEXT = "Erreur"
+SUCCESS_TITLE_TEXT = "Succès"
+TRANSLATION_APPLIED_TEXT = "La traduction a été appliquée avec succès !"
+UNKNOWN_SOURCE_ERROR_TEXT = "Source de traduction inconnue."
+USER_CFG_TEXT = "g_language = french_(france)"
+TRANSLATION_SOURCE_LABEL = "Source de traduction :"
+SELECT_TEXT_CIRQUE_LISOIR = "Traduction Cirque Lisoir & Communauté FR"
+SELECT_TEXT_SPEED0U = "Traduction FR de SPEED0U"
+
 # Fonction pour mettre à jour la source de traduction
 def update_translation_source(event):
     source = translation_source_var.get()
@@ -20,7 +31,7 @@ def update_translation_source(event):
 
 # Fonction pour sélectionner le dossier de Star Citizen
 def get_path():
-    path = filedialog.askdirectory(title="Sélectionner le dossier de Star Citizen")
+    path = filedialog.askdirectory(title=SELECT_FOLDER_TEXT)
     if path:
         config.set("path", "path", path)
         with open(CONFIG_FILE, "w") as configfile:
@@ -28,7 +39,7 @@ def get_path():
         label_path.configure(text=path)
         button_traduction.configure(state="normal")
     else:
-        messagebox.showerror("Erreur", "Vous devez sélectionner un dossier")
+        messagebox.showerror(ERROR_TITLE_TEXT, "Vous devez sélectionner un dossier")
 
 # Fonction pour appliquer la traduction
 def get_translation():
@@ -38,23 +49,23 @@ def get_translation():
 
     try:
         with open(os.path.join(path, "user.cfg"), "w") as userfile:
-            userfile.write("g_language = french_(france)")
+            userfile.write(USER_CFG_TEXT)
     except Exception as e:
-        messagebox.showerror("Erreur", f"Impossible de créer le fichier user.cfg : {str(e)}")
+        messagebox.showerror(ERROR_TITLE_TEXT, f"Impossible de créer le fichier user.cfg : {str(e)}")
 
     path = os.path.join(path, "data")
-    if source == "Traduction Cirque Lisoir & Communauté FR":
+    if source == SELECT_TEXT_CIRQUE_LISOIR:
         url = "https://traduction.circuspes.fr/fr/global.ini"
         try:
             urllib.request.urlretrieve(url, "global.ini")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Impossible de récupérer le fichier de traduction : {str(e)}")
-    elif source == "Traduction FR de SPEED0U":
+            messagebox.showerror(ERROR_TITLE_TEXT, f"Impossible de récupérer le fichier de traduction : {str(e)}")
+    elif source == SELECT_TEXT_SPEED0U:
         zip_url = "https://github.com/SPEED0U/StarCitizenTranslations/archive/master.zip"
         try:
             urllib.request.urlretrieve(zip_url, "translations.zip")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Impossible de télécharger le fichier de traduction : {str(e)}")
+            messagebox.showerror(ERROR_TITLE_TEXT, f"Impossible de télécharger le fichier de traduction : {str(e)}")
 
         with zipfile.ZipFile("translations.zip", "r") as zip_ref:
             zip_ref.extract("StarCitizenTranslations-main/french_(france)/global.ini")
@@ -65,7 +76,7 @@ def get_translation():
         os.rmdir("StarCitizenTranslations-main/french_(france)")
         os.rmdir("StarCitizenTranslations-main")
     else:
-        messagebox.showerror("Erreur", "Source de traduction inconnue.")
+        messagebox.showerror(ERROR_TITLE_TEXT, UNKNOWN_SOURCE_ERROR_TEXT)
         return
 
     localization_dir = os.path.join(path, "Localization")
@@ -75,15 +86,15 @@ def get_translation():
             try:
                 shutil.copy("global.ini", french_dir)
                 os.remove("global.ini")
-                messagebox.showinfo("Succès", "La traduction a été appliquée avec succès !")
+                messagebox.showinfo(SUCCESS_TITLE_TEXT, TRANSLATION_APPLIED_TEXT)
             except Exception as e:
-                messagebox.showerror("Erreur", f"Impossible de copier le fichier de traduction : {str(e)}")
+                messagebox.showerror(ERROR_TITLE_TEXT, f"Impossible de copier le fichier de traduction : {str(e)}")
         else:
             try:
                 os.mkdir(french_dir)
                 shutil.copy("global.ini", french_dir)
                 os.remove("global.ini")
-                messagebox.showinfo("Succès", "La traduction a été appliquée avec succès !")
+                messagebox.showinfo(SUCCESS_TITLE_TEXT, TRANSLATION_APPLIED_TEXT)
             except Exception as e:
                 os.remove("global.ini")
     else:
@@ -93,9 +104,9 @@ def get_translation():
             os.mkdir(french_dir)
             shutil.copy("global.ini", french_dir)
             os.remove("global.ini")
-            messagebox.showinfo("Succès", "La traduction a été appliquée avec succès !")
+            messagebox.showinfo(SUCCESS_TITLE_TEXT, TRANSLATION_APPLIED_TEXT)
         except Exception as e:
-            messagebox.showerror("Erreur", f"Impossible de créer le dossier Localization : {str(e)}")
+            messagebox.showerror(ERROR_TITLE_TEXT, f"Impossible de créer le dossier Localization : {str(e)}")
 
 # Définition de la fenêtre
 fenetre = tk.Tk()
@@ -123,7 +134,7 @@ else:
 
 if not config.has_section("translation_source"):
     config.add_section("translation_source")
-    config.set("translation_source", "source", "Traduction Cirque Lisoir & Communauté FR")
+    config.set("translation_source", "source", SELECT_TEXT_CIRQUE_LISOIR)
 
 with open(CONFIG_FILE, "w") as configfile:
     config.write(configfile)
@@ -141,9 +152,9 @@ button_traduction = ttk.Button(fenetre, text="Appliquer la traduction", command=
 # Créez le sélecteur
 translation_source_label = ttk.Label(fenetre, text="Source de traduction :")
 translation_source_var = tk.StringVar()
-translation_source_combobox = ttk.Combobox(fenetre, textvariable=translation_source_var, values=["Traduction Cirque Lisoir & Communauté FR", "Traduction FR de SPEED0U"])
+translation_source_combobox = ttk.Combobox(fenetre, textvariable=translation_source_var, values=[SELECT_TEXT_CIRQUE_LISOIR, SELECT_TEXT_SPEED0U])
 translation_source_combobox.set(config.get("translation_source", "source"))
-translation_source_combobox["width"] = 30
+translation_source_combobox["width"] = 40
 
 # Placement des widgets
 titre.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
@@ -157,7 +168,7 @@ button_traduction.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
 translation_source_combobox.bind("<<ComboboxSelected>>", update_translation_source)
 
 # Lancement de la fenêtre
-fenetre.geometry("700x200")  # Augmentez la hauteur pour faire de la place pour le sélecteur
+fenetre.geometry("750x200")  # Augmentez la hauteur pour faire de la place pour le sélecteur
 fenetre.mainloop()
 
 # Fin du script
